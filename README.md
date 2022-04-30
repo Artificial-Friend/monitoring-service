@@ -56,4 +56,14 @@ GET http://localhost:8080/monitoring-result with parameter "url" to get 10 last 
 - Make Results as separate service
  
 </p>
+</details>  
+
+details><summary>LTS</summary>
+<p>
+ 
+- Management
+    - Anroid app
+    - UI web page
+ 
+</p>
 </details>
