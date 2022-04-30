@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+    healthcheck:
+      test: mysqladmin ping -h mysql -u root --password=root
+      interval: 30s
+      timeout: 20s
+      retries: 10
+    restart: unless-stopped
+
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    environment:
+      DATABASE_URL: root:root@mysql/db
+      EUREKA_URL: http://eureka-server:8761/eureka/
+    ports:
+      - "8081:8081"
+    depends_on:
+      eureka-server:
+        condition: service_started
+
+  monitoring-service:
+    build: ./monitoring-service
+    container_name: monitoring-service
+    environment:
+      DATABASE_URL: root:root@mysql/db
+      EUREKA_URL: http://eureka-server:8761/eureka/
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka-server:
+        condition: service_started

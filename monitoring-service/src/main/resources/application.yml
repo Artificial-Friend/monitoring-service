@@ -1,10 +1,9 @@
 spring:
   application:
     name: monitoring-service
+
   datasource:
-    url: jdbc:mysql://127.0.0.1/test
-    username: root
-    password: 123
+    url: jdbc:mysql://${DATABASE_URL}
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -17,6 +16,6 @@ server:
   port: 8080
 
 eureka:
-    client:
-      service-url:
-        defaultZone: http://localhost:8761/eureka
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}
