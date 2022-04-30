@@ -1,7 +1,7 @@
 # Monitoring Service
 ## Launching  
 Download Maven, go to project folder do ```mvn package```  
-Download Docker, go to project do ```docker-compose up```
+Download Docker, go to project do ```docker-compose up```  
 Download the Internet.  
 <br/>
 There are hardcoded users:
