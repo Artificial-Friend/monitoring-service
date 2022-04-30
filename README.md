@@ -1,7 +1,7 @@
 # Monitoring Service
 ## Launching  
-To launch application set your mysql database credentials inside application.yml of ```user-service``` and ```monitoring-service``` modules.  
-Start ```EurekaServerApplication```, ```UserServiceApplication```, ```MonitorServiceApplication```.  
+Download Maven, go to project folder do ```mvn package```  
+Download Docker, go to project do ```docker-compose up```
 Download the Internet.  
 <br/>
 There are hardcoded users:
