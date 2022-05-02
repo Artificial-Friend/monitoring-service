@@ -76,5 +76,6 @@
         <module>eureka-server</module>
         <module>user-service</module>
         <module>monitoring-service</module>
+        <module>monitoring-result-service</module>
     </modules>
 </project>

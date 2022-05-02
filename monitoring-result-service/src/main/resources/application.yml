@@ -1,6 +1,6 @@
 spring:
   application:
-    name: user-service
+    name: monitoring-result-service
 
   datasource:
     url: jdbc:mysql://${DATABASE_URL}
@@ -14,7 +14,7 @@ spring:
     show-sql: true
 
 server:
-  port: 8080
+  port: 8082
 
 eureka:
   client:

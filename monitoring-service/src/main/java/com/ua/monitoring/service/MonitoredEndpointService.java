@@ -16,4 +16,6 @@ public interface MonitoredEndpointService {
     void deleteByIdAndUserId(Long endpointId, Long userId);
 
     void updateLastCheck(MonitoredEndpoint monitoredEndpoint);
+
+    List<Long> findIdsByUserIdAndUrl(Long userId, String url);
 }

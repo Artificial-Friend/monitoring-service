@@ -42,4 +42,9 @@ public class MonitoredEndpointServiceImpl implements MonitoredEndpointService {
         monitoredEndpoint.setDateOfLastCheck(LocalDateTime.now());
         monitoredEndpointRepository.updateLastCheck(monitoredEndpoint.getDateOfLastCheck(), monitoredEndpoint.getId());
     }
+
+    @Override
+    public List<Long> findIdsByUserIdAndUrl(final Long userId, final String url) {
+        return monitoredEndpointRepository.findIdsByUserIdAndUrl(userId, url);
+    }
 }

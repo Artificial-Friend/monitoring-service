@@ -1,10 +1,10 @@
-package com.ua.monitoring.service.impl;
+package com.ua.monitoring.result.service.impl;
 
 import java.util.List;
 
-import com.ua.monitoring.model.MonitoringResult;
-import com.ua.monitoring.repository.MonitoringResultRepository;
-import com.ua.monitoring.service.MonitoringResultService;
+import com.ua.monitoring.result.model.MonitoringResult;
+import com.ua.monitoring.result.repository.MonitoringResultRepository;
+import com.ua.monitoring.result.service.MonitoringResultService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class MonitoringResultServiceImpl implements MonitoringResultService {
     }
 
     @Override
-    public List<MonitoringResult> getLastTenByUrlAndUserId(final String url, final Long userId) {
-        return monitoringResultRepository.findByUrlAndUserId(url, userId, PageRequest.of(0, 10));
+    public List<MonitoringResult> getLastTenByUrlAndUserId(final List<Long> endpointIds) {
+        return monitoringResultRepository.findByUrlAndUserId(endpointIds, PageRequest.of(0, 10));
     }
 }

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import com.ua.monitoring.dto.MonitoredEndpointRequestDto;
 import com.ua.monitoring.dto.MonitoredEndpointResponseDto;
 import com.ua.monitoring.model.MonitoredEndpoint;
-import com.ua.monitoring.service.ExternalScheduler;
+import com.ua.monitoring.service.impl.SchedulerImpl;
 import com.ua.monitoring.service.MonitoredEndpointService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -32,7 +33,7 @@ public class MonitoredEndpointController {
     private final WebClient.Builder webClientBuilder;
     private final MonitoredEndpointService monitoredEndpointService;
     private final ModelMapper modelMapper;
-    private final ExternalScheduler externalScheduler;
+    private final SchedulerImpl schedulerImpl;
 
     @GetMapping("all")
     public ResponseEntity<List<MonitoredEndpointResponseDto>> getMonitoredEndpoints(
@@ -48,10 +49,23 @@ public class MonitoredEndpointController {
                 .collect(Collectors.toList()));
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<MonitoredEndpointResponseDto> edit(
-            @PathVariable("id") final Long id,
+    @GetMapping("endpoints-ids")
+    public ResponseEntity<List<Long>> endpointsIds(
             @RequestHeader("accessToken") final String accessToken,
+            @RequestParam("url") final String url
+    ) {
+        final Long userId = getUserId(accessToken);
+        if (userId == 0) {
+            return ResponseEntity.status(403).build();
+        }
+
+        return ResponseEntity.ok(monitoredEndpointService.findIdsByUserIdAndUrl(userId, url));
+    }
+
+    @PostMapping("{id}")
+    public ResponseEntity<MonitoredEndpointResponseDto> edit(
+            @RequestHeader("accessToken") final String accessToken,
+            @PathVariable("id") final Long id,
             @RequestBody final MonitoredEndpointRequestDto monitoredDto
     ) {
         final Long userId = getUserId(accessToken);
@@ -67,8 +81,8 @@ public class MonitoredEndpointController {
                     return monitoredEndpointService.saveOrUpdate(endpoint);
                 })
                 .stream().peek(endpoint -> {
-                    externalScheduler.removeJob(endpoint.getId());
-                    externalScheduler.addJob(endpoint);
+                    schedulerImpl.removeMonitoringJob(endpoint.getId());
+                    schedulerImpl.addMonitoringJob(endpoint);
                 })
                 .findFirst()
                 .map(endpoint -> modelMapper.map(endpoint, MonitoredEndpointResponseDto.class))
@@ -94,7 +108,7 @@ public class MonitoredEndpointController {
         monitoredEndpoint.setUserId(userId);
 
         final MonitoredEndpoint endpoint = monitoredEndpointService.saveOrUpdate(monitoredEndpoint);
-        externalScheduler.addJob(endpoint);
+        schedulerImpl.addMonitoringJob(endpoint);
         return ResponseEntity.ok(modelMapper.map(endpoint, MonitoredEndpointResponseDto.class));
     }
 
@@ -104,13 +118,13 @@ public class MonitoredEndpointController {
             @PathVariable("endpointId") final Long endpointId
     ) {
         monitoredEndpointService.deleteByIdAndUserId(endpointId, getUserId(accessToken));
-        externalScheduler.removeJob(endpointId);
+        schedulerImpl.removeMonitoringJob(endpointId);
         return ResponseEntity.ok().build();
     }
 
     private Long getUserId(final String accessToken) {
         return webClientBuilder.build()
-                .post()
+                .get()
                 .uri("http://user-service/users/get-id")
                 .header("accessToken", accessToken)
                 .exchangeToMono(response -> {

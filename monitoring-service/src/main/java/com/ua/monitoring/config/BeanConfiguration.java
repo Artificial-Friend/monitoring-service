@@ -13,31 +13,36 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableScheduling
 public class BeanConfiguration {
 
-    @LoadBalanced
-    @Bean
-    public WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
-    }
+	@LoadBalanced
+	@Bean
+	public WebClient.Builder webClientBuilder() {
+		return WebClient.builder();
+	}
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+	@Bean
+	public WebClient webClient(WebClient.Builder builder) {
+		return builder.build();
+	}
 
-    @Bean
-    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
-        ThreadPoolTaskScheduler threadPoolTaskScheduler
-                = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(5);
-        threadPoolTaskScheduler.setThreadNamePrefix(
-                "ThreadPoolTaskScheduler");
-        return threadPoolTaskScheduler;
-    }
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
 
-    @Bean
-    public ScheduledTaskRegistrar scheduledTaskRegistrar() {
-        ScheduledTaskRegistrar scheduledTaskRegistrar = new ScheduledTaskRegistrar();
-        scheduledTaskRegistrar.setScheduler(threadPoolTaskScheduler());
-        return scheduledTaskRegistrar;
-    }
+	@Bean
+	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+		ThreadPoolTaskScheduler threadPoolTaskScheduler
+				= new ThreadPoolTaskScheduler();
+		threadPoolTaskScheduler.setPoolSize(5);
+		threadPoolTaskScheduler.setThreadNamePrefix(
+				"ThreadPoolTaskScheduler");
+		return threadPoolTaskScheduler;
+	}
+
+	@Bean
+	public ScheduledTaskRegistrar scheduledTaskRegistrar() {
+		ScheduledTaskRegistrar scheduledTaskRegistrar = new ScheduledTaskRegistrar();
+		scheduledTaskRegistrar.setScheduler(threadPoolTaskScheduler());
+		return scheduledTaskRegistrar;
+	}
 }

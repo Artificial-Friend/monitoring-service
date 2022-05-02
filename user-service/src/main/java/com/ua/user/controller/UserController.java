@@ -2,7 +2,7 @@ package com.ua.user.controller;
 
 import com.ua.user.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private UserService userService;
 
-    @PostMapping("/get-id")
+    @GetMapping("/get-id")
     public Long getId(@RequestHeader("accessToken") final String accessToken) {
         return userService.findIdByAccessToken(accessToken);
     }

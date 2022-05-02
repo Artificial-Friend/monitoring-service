@@ -23,4 +23,7 @@ public interface MonitoredEndpointRepository extends JpaRepository<MonitoredEndp
     @Modifying
     @Query("UPDATE MonitoredEndpoint SET dateOfLastCheck = ?1 WHERE id = ?2 ")
     void updateLastCheck(LocalDateTime time, Long id);
+
+    @Query("SELECT id FROM MonitoredEndpoint WHERE userId = ?1 AND url LIKE ?2")
+    List<Long> findIdsByUserIdAndUrl(Long userId, String url);
 }

@@ -1,4 +1,4 @@
-package com.ua.monitoring.dto;
+package com.ua.monitoring.result.dto;
 
 import java.time.LocalDateTime;
 
