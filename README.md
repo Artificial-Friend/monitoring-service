@@ -32,12 +32,12 @@ Body:
 }
 ```  
 
-GET http://localhost:8081/monitored-endpoint/all - get all endpoints by user  
-POST http://localhost:8081/monitored-endpoint/create - create endpoint for monitoring with body  
-POST http://localhost:8081/monitored-endpoint/{endpointId} - edit endpoint by id with body  
-DELETE http://localhost:8081/monitored-endpoint/delete/{endpointId} - delete by id  
+GET http://localhost:8080/monitored-endpoint/all - get all endpoints by user  
+POST http://localhost:8080/monitored-endpoint/create - create endpoint for monitoring with body  
+POST http://localhost:8080/monitored-endpoint/{endpointId} - edit endpoint by id with body  
+DELETE http://localhost:8080/monitored-endpoint/delete/{endpointId} - delete by id  
 ##### Monitored Result
-GET http://localhost:8082/monitoring-result with parameter "url" to get 10 last results for current user by url  
+GET http://localhost:8080/monitoring-result with parameter "url" to get 10 last results for current user by url  
 <br />
 <br />
 <br />
@@ -48,7 +48,7 @@ GET http://localhost:8082/monitoring-result with parameter "url" to get 10 last 
  
 - ~~Docker~~
 - Spring Security
-- Spring Gateway
+- ~~Spring Gateway~~
 - Deploy Cloud
   - Connect with Telegram bot or Firebase notifications
 - Optimize scheduler
