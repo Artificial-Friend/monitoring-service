@@ -77,5 +77,6 @@
         <module>user-service</module>
         <module>monitoring-service</module>
         <module>monitoring-result-service</module>
+        <module>gateway-service</module>
     </modules>
 </project>

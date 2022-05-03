@@ -34,10 +34,9 @@ services:
       DATABASE_URL: root:root@mysql/db
       EUREKA_URL: http://eureka-server:8761/eureka/
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
-      eureka-server:
-        condition: service_started
+      - gateway-service
 
   monitoring-service:
     build: ./monitoring-service
@@ -46,12 +45,11 @@ services:
       DATABASE_URL: root:root@mysql/db
       EUREKA_URL: http://eureka-server:8761/eureka/
     ports:
-      - "8081:8081"
+      - "8082:8082"
     depends_on:
-      user-service:
-        condition: service_started
-      eureka-server:
-        condition: service_started
+      - user-service
+      - gateway-service
+
 
   monitoring-result-service:
     build: ./monitoring-result-service
@@ -60,9 +58,19 @@ services:
       DATABASE_URL: root:root@mysql/db
       EUREKA_URL: http://eureka-server:8761/eureka/
     ports:
-      - "8082:8082"
+      - "8083:8083"
     depends_on:
-      eureka-server:
-        condition: service_started
-      monitoring-service:
-        condition: service_started
+      - gateway-service
+      - monitoring-service
+
+
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    restart: unless-stopped
