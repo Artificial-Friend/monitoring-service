@@ -18,6 +18,8 @@ services:
       retries: 10
     restart: unless-stopped
 
+
+
   eureka-server:
     build: ./eureka-server
     container_name: eureka-server
