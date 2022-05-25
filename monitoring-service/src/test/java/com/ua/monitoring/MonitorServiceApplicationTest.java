@@ -1,34 +1,18 @@
 package com.ua.monitoring;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.reactive.server.WebTestClient;
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient
 public class MonitorServiceApplicationTest {
-    public static final String USER_ACCESS_TOKEN = "1337-riddler-1337";
 
-    @Autowired
-    private WebTestClient webClient;
-
-    @Test
-    public void getAllByUser_Success() {
-        webClient.get()
-                .uri("/monitored-endpoint/all")
-                .header("accessToken", USER_ACCESS_TOKEN)
-                .exchange()
-                .expectStatus().is2xxSuccessful();
-    }
-
-    @Test
-    public void getAllByWrongUser_Forbidden() {
-        webClient.get()
-                .uri("/monitored-endpoint/all")
-                .header("accessToken", "bad token")
-                .exchange()
-                .expectStatus().isForbidden();
-    }
+//report
+//    @Test
+//    void test() {
+//        Results results = Runner.path("classpath:com/ua/monitoring").outputCucumberJson(true).parallel(1);
+//        AssertionErrors.assertEquals("Tests completed successful", 0, results.getFailCount());
+//
+//        Collection<File> jsonFiles = FileUtils.listFiles(new File(results.getReportDir()), new String[] {"json"}, true);
+//        List<String> jsonPaths = new ArrayList<>(jsonFiles.size());
+//        jsonFiles.forEach(file -> jsonPaths.add(file.getAbsolutePath()));
+//        Configuration config = new Configuration(new File("target"), "demo");
+//        ReportBuilder reportBuilder = new ReportBuilder(jsonPaths, config);
+//        reportBuilder.generateReports();
+//    }
 }
